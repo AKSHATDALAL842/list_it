@@ -1,8 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { firestore } from '@/firebase';
-import { Box, Stack, Typography} from '@mui/material';
-import {collection, deleteDoc, doc, getDocs, query} from 'firebase/firestore'
+import { Box, Modal, Typography, Stack, TextField, Button } from '@mui/material';
+import {collection, deleteDoc, doc, getDocs, query} from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore'
+
 
 export default function Home() {
   const [inventory, setInventory] = useState ([])
@@ -36,9 +38,9 @@ const addItem = async (item) => {
 
 const removeItem = async (item) => {
   const docRef = doc(collection(firestore, 'inventory'), item);
-  const docsnap = await getDoc(docRef);
-  if (docsnap.exists()) {
-    const {quantity} = docSnap. data ()
+  const docsnap = await getDoc(docRef)
+  if (docsnap.exists()){
+    const{quantity} = docSnap.data()
     if(quantity === 1){
       await deleteDoc(docRef)
     }else{
@@ -52,11 +54,25 @@ useEffect (() => {
   updateInventory()
 }, [])
 
+
+
+
+
+
 const handleOpen = () => setOpen(true)
 const handleClose = () => setOpen(false)
 return (
-  <Box width="100vw" height="100vh" display="flex" justifyContent="center" alignItems="center" gap={2}>
-    <Modal open={open} onClose={handleClose}>
+  <Box 
+  width="100vw" 
+  height="100vh" 
+  display="flex" 
+  justifyContent="center" 
+  alignItems="center" 
+  gap={2}
+  >
+    <Modal 
+    open={open} 
+    onClose={handleClose}>
       <Box 
       position="absolute" 
       top="50%" 
@@ -70,17 +86,32 @@ return (
       displaydirection="column" 
       gap={3}
       sx={{
-        transform:'translate(-50%, -50%)' 
+        transform:'translate(-50%, -50%)',
       }}
       >
         <Typography variant="h6">Add Item</Typography>
         <Stack width="100%" direction="row" spacing={2}>
-          <TextField value={ItemName} variant='outlined' fullWidth onChange={(e) => setItemName(e.target.value)}/>
-          <Button variant="coutlined" onClick={() => addItem(itemName)}>Add</Button>
+          <TextField 
+          variant='outlined' 
+          fullWidth value={itemName} 
+          onChange={(e) => {setItemName(e.target.value)}}
+          />
+          <Button 
+          variant="outlined" 
+          onClick={() => {
+            addItem(itemName) 
+            setItemName('') 
+            handleClose()}}>
+              Add
+          </Button>
         </Stack>
       </Box>
     </Modal>
-    <Typography variant='h1'>Inventory Management</Typography>
+    <Button 
+    variant='contained' 
+    onClick={handleOpen}>
+      Add New Item
+    </Button>
 
   </Box>
 )
