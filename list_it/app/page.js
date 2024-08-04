@@ -28,34 +28,10 @@ const style = {
   gap: 3,
 }
 
-// export default function Home() {
-//   // We'll add our component logic here
-//   return (
-//     <Box>
-//       <Typography variant="h1">Inventory Management</Typography>
-//     </Box>
-//   )
-// }
-
-
 export default function Home() {
   const [inventory, setInventory] = useState ([])
   const[open, setOpen] = useState(false)
   const[itemName, setItemName] = useState('')
-
-  const updateInventory = async () => {
-    const snapshot = query(collection(firestore, 'inventory'))
-    const docs = await getDocs(snapshot)
-    const inventoryList = []
-    docs.forEach((doc) => {
-      inventoryList.push({ name: doc.id, ...doc.data() })
-    })
-    setInventory(inventoryList)
-  }
-  
-  useEffect(() => {
-    updateInventory()
-  }, [])
 
 const addItem = async (item) => {
   const docRef = doc(collection(firestore, 'inventory'), item)
@@ -82,6 +58,7 @@ const removeItem = async (item) => {
   }
   await updateInventory()
 }
+
 const handleOpen = () => setOpen(true)
 const handleClose = () => setOpen(false)
 return (
