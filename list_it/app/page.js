@@ -12,6 +12,7 @@ import {
   deleteDoc,
   getDoc,
 } from 'firebase/firestore'
+import { getFirestore } from 'firebase/firestore'
 
 const style = {
   position: 'absolute',
